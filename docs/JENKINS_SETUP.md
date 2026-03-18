@@ -31,6 +31,6 @@ In Jenkins:
 - New Item → Pipeline
 - Pipeline definition: “Pipeline script from SCM”
 - SCM: Git
-- Repo URL: (your GitHub URL)
+- Repo URL: `https://github.com/tmanmoseri1/LoanPaymentSystem`
 - Script path: `Jenkinsfile`
 - Build triggers: ✅ “GitHub hook trigger for GITScm polling”

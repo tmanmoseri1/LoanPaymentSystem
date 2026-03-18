@@ -43,7 +43,7 @@ public class PaymentService {
 
         // Simple ownership check: only owner can pay (admins can pay too due to role config)
         if (loan.getUser() != null && !loan.getUser().getUsername().equals(auth.getName())) {
-            // If you want admins to pay on behalf of others, remove this check or gate it by role.
+            // For admins not to pay on behalf of others
             throw new BadRequestException("You can only pay your own loans");
         }
 

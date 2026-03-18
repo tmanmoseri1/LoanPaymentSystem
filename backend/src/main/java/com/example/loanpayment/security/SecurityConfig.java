@@ -1,5 +1,7 @@
 package com.example.loanpayment.security;
 
+import java.util.List;
+
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,8 +20,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 
-import java.util.List;
-
 @Configuration
 @EnableMethodSecurity
 @EnableConfigurationProperties(JwtProperties.class)
@@ -29,7 +29,11 @@ public class SecurityConfig {
     private final AuthEntryPoint authEntryPoint;
     private final AppUserDetailsService userDetailsService;
 
-    public SecurityConfig(JwtAuthFilter jwtAuthFilter, AuthEntryPoint authEntryPoint, AppUserDetailsService userDetailsService) {
+    public SecurityConfig(
+            JwtAuthFilter jwtAuthFilter,
+            AuthEntryPoint authEntryPoint,
+            AppUserDetailsService userDetailsService
+    ) {
         this.jwtAuthFilter = jwtAuthFilter;
         this.authEntryPoint = authEntryPoint;
         this.userDetailsService = userDetailsService;
@@ -42,10 +46,10 @@ public class SecurityConfig {
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider(PasswordEncoder encoder) {
-        DaoAuthenticationProvider p = new DaoAuthenticationProvider();
-        p.setUserDetailsService(userDetailsService);
-        p.setPasswordEncoder(encoder);
-        return p;
+        DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
+        provider.setUserDetailsService(userDetailsService);
+        provider.setPasswordEncoder(encoder);
+        return provider;
     }
 
     @Bean
@@ -57,12 +61,19 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         return request -> {
             CorsConfiguration config = new CorsConfiguration();
-            config.setAllowedOriginPatterns(List.of("http://localhost:5173"));
-            config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+
+            config.setAllowedOriginPatterns(List.of(
+                    "http://localhost:3000",
+                    "http://localhost:5173"
+            ));
+            config.setAllowedMethods(List.of(
+                    "GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"
+            ));
             config.setAllowedHeaders(List.of("*"));
             config.setExposedHeaders(List.of("Authorization"));
             config.setAllowCredentials(true);
             config.setMaxAge(3600L);
+
             return config;
         };
     }
@@ -88,10 +99,11 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/loans").hasAnyRole("ADMIN", "CUSTOMER")
                         .requestMatchers(HttpMethod.POST, "/payments").hasAnyRole("ADMIN", "CUSTOMER")
                         .anyRequest().authenticated()
-                );
+                )
+                .authenticationProvider(authenticationProvider(passwordEncoder()))
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
-        http.headers(h -> h.frameOptions(f -> f.disable()));
-        http.addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        http.headers(headers -> headers.frameOptions(frame -> frame.disable()));
 
         return http.build();
     }
