@@ -1,0 +1,53 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: loans
+      POSTGRES_USER: loans
+      POSTGRES_PASSWORD: loans
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  backend:
+    build:
+      context: ./backend
+    environment:
+      SPRING_PROFILES_ACTIVE: postgres
+      DB_URL: jdbc:postgresql://postgres:5432/loans
+      DB_USER: loans
+      DB_PASSWORD: loans
+      REDIS_HOST: redis
+      RABBIT_HOST: rabbitmq
+      JWT_SECRET: b7e3f1c9a6d4e2f8b5c1a9d7e3f6b2c8a4d1e9f7c6b3a5d8f2e1c9b7a4d6f3 
+      ADMIN_USERNAME: admin
+      ADMIN_PASSWORD: admin123
+    depends_on:
+      - postgres
+      - redis
+      - rabbitmq
+    ports:
+      - "8081:8081"
+
+  frontend:
+    build:
+      context: ./frontend
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+
+volumes:
+  pgdata:

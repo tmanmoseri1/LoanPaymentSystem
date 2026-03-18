@@ -1,0 +1,11 @@
+package com.example.loanpayment.security;
+
+import lombok.Data;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+@Data
+@ConfigurationProperties(prefix = "app.security.jwt")
+public class JwtProperties {
+    private String issuer = "loan-payment-system";
+    private long expirationMinutes = 120;
+}

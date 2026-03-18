@@ -1,0 +1,11 @@
+○ docker-desktop.service - Docker Desktop
+     Loaded: loaded (]8;;file://my-HP-250-15-6-inch-G10-Notebook-PC/usr/lib/systemd/user/docker-desktop.service/usr/lib/systemd/user/docker-desktop.service]8;;; [0;1;38;5;185mdisabled[0m; preset: [0;1;32menabled[0m)
+     Active: inactive (dead)
+
+Mar 16 14:34:33 my-HP-250-15-6-inch-G10-Notebook-PC systemd[4831]: Starting docker-desktop.service - Docker Desktop...
+Mar 16 14:34:33 my-HP-250-15-6-inch-G10-Notebook-PC systemd[4831]: Started docker-desktop.service - Docker Desktop.
+Mar 16 14:34:34 my-HP-250-15-6-inch-G10-Notebook-PC com.docker.backend[1052972]: [2026-03-16T12:34:34.258209585Z][com.docker.backend] running monitor
+Mar 16 14:34:34 my-HP-250-15-6-inch-G10-Notebook-PC com.docker.backend[1052972]: [2026-03-16T12:34:34.340132267Z][com.docker.backend] running services
+Mar 16 14:34:34 my-HP-250-15-6-inch-G10-Notebook-PC com.docker.backend[1052972]: [12:34:34.340702740Z][main                  ][W] system telemetry disabled, custom otlp endpoint "https://desktop.observability-stage.docker.com" will be ignored
+Mar 16 14:34:34 my-HP-250-15-6-inch-G10-Notebook-PC com.docker.backend[1052972]: [12:34:34.340966933Z][main                  ] backend server is already running
+Mar 16 14:34:34 my-HP-250-15-6-inch-G10-Notebook-PC com.docker.backend[1052972]: [2026-03-16T12:34:34.348175476Z][com.docker.backend] monitor exited: /opt/docker-desktop/bin/com.docker.backend services: exit 0

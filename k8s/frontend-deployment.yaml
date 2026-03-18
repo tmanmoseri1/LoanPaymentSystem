@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: loanpay-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: loanpay-frontend
+  template:
+    metadata:
+      labels:
+        app: loanpay-frontend
+    spec:
+      containers:
+        - name: frontend
+          image: your-registry/loanpay-frontend:1.0.0
+          ports:
+            - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: loanpay-frontend
+spec:
+  selector:
+    app: loanpay-frontend
+  ports:
+    - port: 80
+      targetPort: 80
+  type: LoadBalancer
